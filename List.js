@@ -4,25 +4,78 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  SafeAreaView,
+  Button,
+  ScrollView,
 } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import UpdateModal from "./updateTodos";
 
 const List = (props) => {
+
+  const sortArray = () => {
+  console.log(props.todo,'todo')
+    props.todo.sort();
+  };
+
   return (
-    <FlatList
-      data={props.todo}
-      extraData={props.todo}
-      renderItem={({ item }) => {
-        return (
-          <View style={styles.todoContainer}>
-            <View style={styles.todo}>
-              <Text style={styles.todoText}>{item.title}</Text>
-              <Text>{item.date}</Text>
+    <SafeAreaView>
+      <FlatList
+        data={props.todo}
+        extraData={props.todo}
+        renderItem={({ item }) => {
+          return (
+            <View style={styles.todoContainer}>
+              <View style={styles.todo}>
+                <TouchableOpacity onPress={() => props.setCheck(item.id)}>
+                  <Icon
+                    name={
+                      !item.check
+                        ? "checkbox-blank-circle-outline"
+                        : "checkbox-marked-circle-outline"
+                    }
+                    size={25}
+                    color={"#DC143C"}
+                  />
+                </TouchableOpacity>
+                <ScrollView style={{ width: 160 }}>
+                  <Text
+                    style={!item.check ? styles.title : styles.title1}
+                    onPress={() => {
+                      props.updateTodo(item.id, item.title);
+                      props.setText(null);
+                    }}
+                  >
+                    {item.title}
+                  </Text>
+                </ScrollView>
+                <Text>{item.date}</Text>
+              </View>
             </View>
-          </View>
-        );
-      }}
-      keyExtractor={(item) => item.id.toString()}
-    />
+          );
+        }}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      {props.updateModal ? (
+        <UpdateModal
+          updateModal={props.updateModal}
+          setUpdateModal={props.setUpdateModal}
+          todo={props.todo}
+          date={props.date}
+          addTodos={props.addTodos}
+          showUpdateModal={props.showUpdateModal}
+          editText={props.editText}
+          thisDate={props.thisDate}
+          setTodo={props.setTodo}
+          setDate={props.setDate}
+        />
+      ) : null}
+      
+      <TouchableOpacity style={{width:50,height:30,borderWidth:1}} onPress={sortArray}>
+        <Text>Sort</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

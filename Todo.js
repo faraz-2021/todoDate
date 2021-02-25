@@ -10,22 +10,36 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 import List from "./List";
 
-export default function Todo(props) {
-  useEffect(() => {
-    thisDate();
-  }, [thisDate]);
-  const currentDateTime = Date().toLocaleString();
+export default function Todo() {
+  var today = new Date();
+  var date1 =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  var time =
+    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var current = date1 + "\n" + time;
+
   const [date, setDate] = useState("");
   const [todo, setTodo] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
+  const [editText, setEditText] = useState("");
+  const [updateModal, setUpdateModal] = useState(false);
+  useEffect(() => {
+    todo.sort();
+    thisDate();
+  }, [thisDate]);
 
   const addTodos = (text) => {
-    if (text.trim().length > 0) {
-      setTodo((prevValue) => {
+    if (text) {
+      setTodo(() => {
         return [
-          ...prevValue,
-          { title: text.trim(), id: Math.random().toString(), date: date },
+          ...todo,
+          {
+            title: text.trim(),
+            id: Math.random().toString(),
+            date: date,
+            check: false,
+          },
         ];
       });
     } else {
@@ -33,7 +47,25 @@ export default function Todo(props) {
     }
   };
   const thisDate = () => {
-    setDate(currentDateTime);
+    setDate(current);
+    setText(null);
+  };
+
+  const setCheck = (id) => {
+    const newList = todo.map((e) => {
+      if (e.id === id) {
+        return { ...e, check: !e.check };
+      } else {
+        return { ...e };
+      }
+    });
+    setTodo(newList);
+  };
+
+  const updateTodo = (id, text) => {
+    setUpdateModal(true);
+    const arr = todo.filter((e) => e.id == id);
+    setEditText(arr);
   };
 
   return (
@@ -53,7 +85,7 @@ export default function Todo(props) {
         <Modal
           animationType="fade"
           transparent={true}
-          visible={props.modalVisible}
+          visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
           }}
@@ -67,7 +99,7 @@ export default function Todo(props) {
                 value={text}
               />
               <View style={styles.flex}>
-                <TouchableOpacity onPress={props.handleClick}>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
                   <Text style={styles.Button}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -85,7 +117,22 @@ export default function Todo(props) {
         </Modal>
       ) : null}
       <View>
-        <List todo={todo} date={date} />
+        <List
+          todo={todo}
+          date={date}
+          setCheck={setCheck}
+          setTodo={setTodo}
+          text={text}
+          setModalVisible={setModalVisible}
+          updateModal={updateModal}
+          setUpdateModal={setUpdateModal}
+          editText={editText}
+          thisDate={thisDate}
+          updateTodo={updateTodo}
+          addTodos={addTodos}
+          setDate={setDate}
+          setText={setText}
+        />
       </View>
     </View>
   );
