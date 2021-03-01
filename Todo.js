@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
   StyleSheet,
   Text,
@@ -11,20 +11,12 @@ import Icon from "react-native-vector-icons/AntDesign";
 import List from "./List";
 
 export default function Todo() {
-  var today = new Date();
-  var date1 =
-    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-  var time =
-    today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-  var current = date1 + "\n" + time;
-
   const [date, setDate] = useState("");
   const [todo, setTodo] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
   const [updateModal, setUpdateModal] = useState(false);
- 
 
   const addTodos = (text) => {
     if (text) {
@@ -44,7 +36,6 @@ export default function Todo() {
     }
   };
   const thisDate = () => {
-    setDate(current);
     setText(null);
   };
 
@@ -59,12 +50,12 @@ export default function Todo() {
     setTodo(newList);
   };
 
-  const updateTodo = (id, text) => {
+  const updateTodo = (id) => {
     setUpdateModal(true);
     const arr = todo.filter((e) => e.id == id);
     setEditText(arr);
   };
-
+  
   return (
     <View style={styles.Main}>
       <View style={styles.Head}>

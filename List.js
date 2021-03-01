@@ -12,12 +12,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import UpdateModal from "./updateTodos";
 
 const List = (props) => {
-
-  const sortArray = () => {
-  console.log(props.todo,'todo')
-    props.todo.sort((a,b) => a.date - b.date);
-  };
-
   return (
     <SafeAreaView>
       <FlatList
@@ -49,7 +43,7 @@ const List = (props) => {
                     {item.title}
                   </Text>
                 </ScrollView>
-                <Text>{item.date.toString()}</Text>
+                <Text>{item.date.toLocaleString()}</Text>
               </View>
             </View>
           );
@@ -70,10 +64,6 @@ const List = (props) => {
           setDate={props.setDate}
         />
       ) : null}
-      
-      <TouchableOpacity style={{width:50,height:30,borderWidth:1}} onPress={sortArray}>
-        <Text>Sort</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };

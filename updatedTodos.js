@@ -9,11 +9,8 @@ import {
 } from "react-native";
 
 export default function UpdateModal(props) {
-
-
-  let temp = "";
   if (props.editText.length > 0) {
-    const { title, date } = props.editText[0];
+    const { title } = props.editText[0];
     temp = title;
   }
   const [text, setText] = useState(temp);
@@ -26,6 +23,7 @@ export default function UpdateModal(props) {
       if (props.editText.length > 0) {
         let result = props.editText[0];
         result.title = text.trim();
+        result.date = new Date();
         props.todo.forEach((a, i) => {
           if (a.id == result.id) {
             props.todo[i] = result;
