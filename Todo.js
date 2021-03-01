@@ -24,10 +24,7 @@ export default function Todo() {
   const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
   const [updateModal, setUpdateModal] = useState(false);
-  useEffect(() => {
-    todo.sort();
-    thisDate();
-  }, [thisDate]);
+ 
 
   const addTodos = (text) => {
     if (text) {
@@ -37,7 +34,7 @@ export default function Todo() {
           {
             title: text.trim(),
             id: Math.random().toString(),
-            date: date,
+            date: new Date(),
             check: false,
           },
         ];

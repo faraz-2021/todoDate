@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  Button,
   ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -16,7 +15,7 @@ const List = (props) => {
 
   const sortArray = () => {
   console.log(props.todo,'todo')
-    props.todo.sort();
+    props.todo.sort((a,b) => a.date - b.date);
   };
 
   return (
@@ -50,7 +49,7 @@ const List = (props) => {
                     {item.title}
                   </Text>
                 </ScrollView>
-                <Text>{item.date}</Text>
+                <Text>{item.date.toString()}</Text>
               </View>
             </View>
           );
