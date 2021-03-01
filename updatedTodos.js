@@ -9,6 +9,7 @@ import {
 } from "react-native";
 
 export default function UpdateModal(props) {
+  let temp = "";
   if (props.editText.length > 0) {
     const { title } = props.editText[0];
     temp = title;
@@ -30,7 +31,6 @@ export default function UpdateModal(props) {
           }
         });
         const a = props.todo.sort((a, b) => a.date - b.date);
-        console.log(a, "djhkdk");
         props.setTodo(a);
       }
     } else {

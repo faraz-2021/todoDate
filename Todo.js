@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import List from "./List";
+import Constants from "expo-constants";
+import AsyncStorage from "@react-native-community/async-storage";
 
-export default function Todo() {
+export default function Todo({ navigation }) {
   const [date, setDate] = useState("");
   const [todo, setTodo] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,7 +57,11 @@ export default function Todo() {
     const arr = todo.filter((e) => e.id == id);
     setEditText(arr);
   };
-  
+  const clearAsyncStorage = async () => {
+    await AsyncStorage.clear();
+    navigation.navigate("Login");
+  };
+
   return (
     <View style={styles.Main}>
       <View style={styles.Head}>
@@ -120,6 +126,7 @@ export default function Todo() {
           addTodos={addTodos}
           setDate={setDate}
           setText={setText}
+          clearAsyncStorage={clearAsyncStorage}
         />
       </View>
     </View>
@@ -132,6 +139,7 @@ const styles = StyleSheet.create({
 
     borderBottomColor: "#808080",
     padding: 10,
+    marginTop: Constants.statusBarHeight,
   },
   Head: {
     flexDirection: "row",

@@ -1,23 +1,45 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { ScrollView, StyleSheet} from "react-native";
-import Constants from "expo-constants";
+import React, { useState, useEffect } from "react";
+import { ScrollView, StyleSheet } from "react-native";
 import Todo from "./Todo";
+import Login from "./src/screens/Login";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-community/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
+
+const Stack = createStackNavigator();
+const user = "no user found";
 
 export default function App() {
-  return (
-    <ScrollView style={styles.container}>
-      <Todo />
+  const [localId, setLocalId] = useState();
 
-      <StatusBar style="auto" />
-    </ScrollView>
+  useEffect(() => {
+    (async () => {
+      const id = await AsyncStorage.getItem("id");
+      id ? setLocalId(id) : setLocalId(user);
+    })();
+  }, []);
+
+  return (
+    <NavigationContainer style={styles.container}>
+      {localId && (
+        <Stack.Navigator
+          initialRouteName={localId === user ? "Login" : "Home"}
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Home" component={Todo} />
+        </Stack.Navigator>
+      )}
+      <StatusBar barStyle="light-content" style="auto" />
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: Constants.statusBarHeight,
   },
 });
