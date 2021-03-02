@@ -19,6 +19,7 @@ export default function Todo({ navigation }) {
   const [text, setText] = useState("");
   const [editText, setEditText] = useState("");
   const [updateModal, setUpdateModal] = useState(false);
+  const [getTodoId, setGetTodoId] = useState("");
 
   const addTodos = (text) => {
     if (text) {
@@ -30,6 +31,7 @@ export default function Todo({ navigation }) {
             id: Math.random().toString(),
             date: new Date(),
             check: false,
+            subTodo: [],
           },
         ];
       });
@@ -42,11 +44,18 @@ export default function Todo({ navigation }) {
   };
 
   const setCheck = (id) => {
-    const newList = todo.map((e) => {
-      if (e.id === id) {
-        return { ...e, check: !e.check };
+    const newList = todo.map((eid) => {
+      if (eid.id === id) {
+        const childTodo = eid.subTodo.map((e) => {
+          if (eid.check == true) {
+            return { ...e, check: false };
+          } else {
+            return { ...e, check: true };
+          }
+        });
+        return { ...eid, check: !eid.check, subTodo: childTodo };
       } else {
-        return { ...e };
+        return { ...eid };
       }
     });
     setTodo(newList);
@@ -60,6 +69,34 @@ export default function Todo({ navigation }) {
   const clearAsyncStorage = async () => {
     await AsyncStorage.clear();
     navigation.navigate("Login");
+  };
+
+  const addSubTodo = (id) => {
+    const arr = todo.filter((e) => e.id == id);
+    setGetTodoId(arr);
+  };
+  const subCheck = (id, parentId) => {
+    const MainTodo = todo.map((eid, i) => {
+      if (eid.id == parentId) {
+        const childTodo = eid.subTodo.map((item) => {
+          if (item.id == id) {
+            return { ...item, check: !item.check };
+          } else {
+            return { ...item };
+          }
+        });
+        const result = childTodo.map((val) => val.check == true);
+        if (!result.includes(false)) {
+          todo[i].check = true;
+        } else {
+          todo[i].check = false;
+        }
+        return { ...eid, subTodo: childTodo };
+      } else {
+        return { ...eid };
+      }
+    });
+    setTodo(MainTodo);
   };
 
   return (
@@ -127,6 +164,10 @@ export default function Todo({ navigation }) {
           setDate={setDate}
           setText={setText}
           clearAsyncStorage={clearAsyncStorage}
+          getTodoId={getTodoId}
+          setGetTodoId={setGetTodoId}
+          addSubTodo={addSubTodo}
+          subCheck={subCheck}
         />
       </View>
     </View>

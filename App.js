@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import Todo from "./Todo";
+import { StyleSheet } from "react-native";
+import Todo from "./src/component/Todo";
 import Login from "./src/screens/Login";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-community/async-storage";
